@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>daw-mcp-server — 让 AI Agent 真正操作 DAW</title>
+<style>
+  :root { --bg:#0b0d12; --fg:#e8ecf4; --muted:#9aa4b2; --accent:#7c5cff; --card:#141826; --line:#232a3d; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 -apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:980px; margin:0 auto; padding:64px 24px; }
+  .badge { display:inline-block; font-size:13px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:4px 12px; margin-bottom:20px; }
+  h1 { font-size:44px; line-height:1.15; margin:0 0 16px; letter-spacing:-1px; }
+  h1 span { color:var(--accent); }
+  .sub { color:var(--muted); font-size:19px; max-width:760px; margin:0 0 32px; }
+  .cta { display:flex; gap:14px; flex-wrap:wrap; margin:0 0 48px; }
+  .btn { display:inline-block; padding:12px 22px; border-radius:10px; text-decoration:none; font-weight:600; }
+  .primary { background:var(--accent); color:#fff; }
+  .ghost { border:1px solid var(--line); color:var(--fg); }
+  h2 { font-size:24px; margin:44px 0 18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+  .card h3 { margin:0 0 8px; font-size:17px; }
+  .card p { margin:0; color:var(--muted); font-size:14px; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+  pre { background:#0e1220; border:1px solid var(--line); border-radius:12px; padding:16px; overflow:auto; font-size:14px; }
+  table { width:100%; border-collapse:collapse; font-size:14.5px; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; }
+  .links a { color:var(--accent); text-decoration:none; margin-right:18px; }
+  footer { margin-top:56px; color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="badge">MCP · Model Context Protocol · Apache-2.0</div>
+  <h1>让 AI Agent 真正<span>操作 DAW</span></h1>
+  <p class="sub">daw-mcp-server 把 FL Studio / REAPER / DAWproject 的自动化接口封装成 11 个 MCP tools：读工程、套用混音 patch、渲染、测量 LUFS/频谱/立体声、闭环验证——给音乐 AI 的训练与推理用。</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/ShokouP/daw-mcp-server">GitHub 仓库</a>
+    <a class="btn ghost" href="https://github.com/ShokouP/daw-mcp-server/releases">下载 Release</a>
+    <a class="btn ghost" href="https://github.com/ShokouP/daw-mcp-server/blob/main/docs/DAW-API-SURVEY.md">DAW 接口清单</a>
+  </div>
+
+  <h2>11 个 Tool</h2>
+  <table>
+    <tr><th>Tool</th><th>作用</th></tr>
+    <tr><td>project_read</td><td>读 .rpp / .dawproject：轨道、音量/声像、send、marker、tempo</td></tr>
+    <tr><td>patch_validate / patch_apply</td><td>校验/套用混音 IR patch（音轨、EQ、压缩、send、marker）</td></tr>
+    <tr><td>render</td><td>真实 DAW 命令渲染（reaper -renderproject）或 mock 渲染</td></tr>
+    <tr><td>analyze / compare</td><td>WAV：peak/RMS/LUFS/LRA/频谱质心/频带/立体声宽度/相关度</td></tr>
+    <tr><td>verify_patch</td><td>闭环：apply → render baseline+patched → analyze → 按 intent 打分</td></tr>
+    <tr><td>bridge_call</td><td>live DAW 桥：get_state / set_track / set_eq / set_comp / add_marker</td></tr>
+    <tr><td>telemetry_append</td><td>操作/验证结果写 JSONL，训练数据回流</td></tr>
+  </table>
+
+  <h2>30 秒上手</h2>
+<pre>git clone https://github.com/ShokouP/daw-mcp-server
+cd daw-mcp-server
+python -m pip install -r requirements.txt
+python tests/test_smoke.py      # 无需安装 DAW
+python examples/training_loop.py</pre>
+
+  <h2>训练/推理闭环</h2>
+<pre>模型输出 IR patch
+  → patch_validate → patch_apply → render → analyze
+  → verify_patch（打分） → bridge_call（应用到 live DAW）
+  → telemetry_append（数据回流）</pre>
+
+  <h2>生态</h2>
+  <div class="grid">
+    <div class="card"><h3>open-music-production-corpus</h3><p>3,713 万 tokens 音乐制作/音频工程文本语料（23 源，含和声/对位/乐器法/总谱分析）</p></div>
+    <div class="card"><h3>open-music-engineering-data</h3><p>10,208 鼓 Pattern、30,336 结构边界、DAWproject 规范、参数样本</p></div>
+    <div class="card"><h3>daw-mcp-server</h3><p>本页：DAW 自动化/渲染/验证 MCP tools</p></div>
+  </div>
+
+  <h2>兼容的 DAW</h2>
+  <div class="links">
+    <a href="https://github.com/ShokouP/daw-mcp-server/tree/main/adapters">REAPER（ReaScript 桥）</a>
+    <a href="https://github.com/ShokouP/daw-mcp-server/tree/main/adapters">FL Studio（MIDI scripting 桥）</a>
+    <a href="https://github.com/bitwig/dawproject">DAWproject（开放格式）</a>
+    <a href="https://github.com/ShokouP/daw-mcp-server/blob/main/docs/DAW-API-SURVEY.md">Ardour / Pro Tools / Ableton / Bitwig / Logic / Cubase</a>
+  </div>
+
+  <footer>Apache-2.0 · 如果这个项目对你有用，欢迎给仓库点个 Star。</footer>
+</div>
+</body>
+</html>

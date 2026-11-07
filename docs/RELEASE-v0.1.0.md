@@ -1,8 +1,11 @@
-# DAW MCP Server v0.1.0
+# DAW MCP Server v0.1.0 — 让 AI Agent 真正操作 DAW
 
-把 DAW 可调用接口封装成 **MCP tools**，用于训练闭环与推理验证。
+[![GitHub stars](https://img.shields.io/github/stars/ShokouP/daw-mcp-server?style=social)](https://github.com/ShokouP/daw-mcp-server)
 
-**11 个 MCP tools**：`daw_status`、`daw_apis`、`project_read`、`patch_validate`、`patch_apply`、`render`、`analyze`、`compare`、`verify_patch`、`bridge_call`、`telemetry_append`。
+把 DAW 可调用接口封装成 **11 个 MCP tools**，用于训练闭环与推理验证：
+`daw_status`、`daw_apis`、`project_read`、`patch_validate`、`patch_apply`、`render`、`analyze`、`compare`、`verify_patch`、`bridge_call`、`telemetry_append`。
+
+如果这个项目对你有用，欢迎给仓库点个 Star，让更多做音乐 AI / Agent 的人找到它。
 
 ## 覆盖的 DAW 接口（调研结果见 docs/DAW-API-SURVEY.md）
 
@@ -28,18 +31,14 @@
 
 `examples/training_loop.py`：30 个 patch 的生成-验证-记录闭环（无 DAW 也可跑通）；自洽 intent 验证 30/30 通过。
 
-## 验证
-
-- `python tests/test_smoke.py` → **ALL TESTS PASSED**（rpp 解析/改写、patch 校验、mock 渲染、WAV 指标、闭环打分、MCP stdio 握手与 tools/list、tools/call）
-- 开发环境未安装 FL Studio / REAPER：适配器为模板，协议与 mock bridge 已测；live DAW 需在本机加载验证。
-
-## 安装
+## 30 秒上手
 
 ```bash
 git clone https://github.com/ShokouP/daw-mcp-server
 cd daw-mcp-server
 python -m pip install -r requirements.txt
-python tests/test_smoke.py
+python tests/test_smoke.py      # ALL TESTS PASSED（无需安装 DAW）
+python examples/training_loop.py
 ```
 
 **MCP 客户端（Claude/Codex/DSH）**：
@@ -57,14 +56,15 @@ ctx = Context({"telemetry_path": "telemetry.jsonl"})
 res = dispatch(ctx, "verify_patch", {"path": "song.rpp", "patch": patch, "intent": {...}})
 ```
 
+## 生态
+
+- 文本语料：[open-music-production-corpus](https://github.com/ShokouP/open-music-production-corpus) — 3,713 万 tokens，23 源，含和声/对位/乐器法/总谱分析
+- 工程/符号数据：[open-music-engineering-data](https://github.com/ShokouP/open-music-engineering-data) — 10,208 鼓 Pattern / 30,336 结构边界 / DAWproject / 参数样本
+- 发布与引流素材：[docs/LAUNCH.md](https://github.com/ShokouP/daw-mcp-server/blob/main/docs/LAUNCH.md)
+
 ## 限制
 
 - mock 渲染是确定性合成（用于 CI/训练闭环），不是真实音质；
 - FL Studio 无官方 headless 渲染/工程 API，live 控制依赖脚本桥；
 - REAPER 适配器需在 REAPER 内加载并校对 action/param 名称；
 - 训练闭环默认只写 `daw_mcp_work/` 副本，不覆盖用户工程。
-
-## 相关仓库
-
-- 文本语料：https://github.com/ShokouP/open-music-production-corpus
-- 工程/符号数据：https://github.com/ShokouP/open-music-engineering-data
