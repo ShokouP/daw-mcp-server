@@ -1,0 +1,7 @@
+﻿__pycache__/
+*.pyc
+*.pyo
+daw_mcp_work/
+daw_telemetry.jsonl
+config.local.json
+.venv/

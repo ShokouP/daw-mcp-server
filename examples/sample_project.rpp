@@ -1,0 +1,47 @@
+<REAPER_PROJECT 0.1 "7.0/win64" 1700000000
+  RIPPLE 0
+  GROUPOVERRIDE 0 0 0
+  TEMPO 120 4 4
+  MARKER 1 0 "intro" 0 0 1 B
+  <TRACK
+    NAME "Drums"
+    VOLPAN 1.000000 0.000000 -1 -1 1
+    MUTESOLO 0 0 0
+    <TRACK
+      NAME "Kick"
+      VOLPAN 1.000000 0.000000 -1 -1 1
+      MUTESOLO 0 0 0
+      <ITEM
+        POSITION 0
+        LENGTH 8
+        NAME "kick.wav"
+      >
+    >
+  >
+  <TRACK
+    NAME "Bass"
+    VOLPAN 0.501187 0.000000 -1 -1 1
+    MUTESOLO 0 0 0
+    <ITEM
+      POSITION 0
+      LENGTH 8
+      NAME "bass.wav"
+    >
+  >
+  <TRACK
+    NAME "Vocal"
+    VOLPAN 0.316228 -0.200000 -1 -1 1
+    MUTESOLO 0 0 0
+    <ITEM
+      POSITION 0
+      LENGTH 8
+      NAME "vocal.wav"
+    >
+  >
+  <TRACK
+    NAME "Reverb Bus"
+    VOLPAN 1.000000 0.000000 -1 -1 1
+    MUTESOLO 0 0 0
+    AUXRECV 2 0.125892 0 0 0 0 0 -1 0 -1 0 0
+  >
+>
