@@ -135,4 +135,4 @@ Apache-2.0（见 LICENSE）。适配器脚本安装到对应 DAW，不包含 DAW
 
 ## 相关模型
 
-DAWcoder 4B（音乐制作参数模型，Qwen3.5-4B 基座，GGUF Q4_K_M）：https://huggingface.co/Shokou1/dawcoder
+DAWcoder 4B（音乐制作参数模型，Qwen3.5-4B 基座，GGUF Q4_K_M）：https://huggingface.co/Shokou1/qwen3.5-4B-dawcoder
